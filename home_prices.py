@@ -30,8 +30,6 @@ test_data = test_data[test_features]
 
 num_features = train_data.select_dtypes(exclude='object').columns
 cat_features = train_data.select_dtypes(include='object').columns
-print('cat_features nè', cat_features)
-
 
 for cat_feature in cat_features:
     lbl = LabelEncoder() 
@@ -43,9 +41,7 @@ for cat_feature in cat_features:
     lbl.fit(list(test_data[cat_feature].values)) 
     test_data[cat_feature] = lbl.transform(list(test_data[cat_feature].values))
 
-print(f'train_data nè: ', train_data)
 train, test = train_test_split(train_data, test_size=0.3, random_state=0)
-print(train, test)
 
 y_train = train[['SalePrice']]
 X_train = train.drop(['SalePrice'], axis=1)
@@ -68,11 +64,9 @@ input = X_train.shape[1]
 output = y_train.shape[1]
 
 nn = net.NeuralNetwork([
-    net.Layer(input,20),
-    net.Layer(20,10),
-    net.Layer(10,output,is_last=True)])
+    net.Layer(input,output,is_last=True)])
 
-for i_epochs in range(1000):
+for i_epochs in range(500):
   net.train_nn(nn,X_train,y_train,learning_rate=0.1)
   train_loss = net.loss_mse(y_train,nn(X_train))
   test_loss = net.loss_mse(y_test,nn(X_test))
